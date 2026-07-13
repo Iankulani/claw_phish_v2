@@ -1,0 +1,66 @@
+# CLAW_PHISH_v2 Makefile
+
+.PHONY: help install dev-install test lint format clean run docker-build docker-run docker-stop docker-clean
+
+help:
+	@echo "CLAW_PHISH_v2 Makefile"
+	@echo ""
+	@echo "Available commands:"
+	@echo "  install        - Install production dependencies"
+	@echo "  dev-install    - Install development dependencies"
+	@echo "  test           - Run tests"
+	@echo "  lint           - Run linters"
+	@echo "  format         - Format code"
+	@echo "  clean          - Clean temporary files"
+	@echo "  run            - Run the application"
+	@echo "  docker-build   - Build Docker image"
+	@echo "  docker-run     - Run Docker container"
+	@echo "  docker-stop    - Stop Docker container"
+	@echo "  docker-clean   - Clean Docker resources"
+
+install:
+	pip install -r requirements.txt
+
+dev-install:
+	pip install -r requirements-dev.txt
+	pre-commit install
+
+test:
+	pytest tests/ -v --cov=src --cov-report=term-missing
+
+lint:
+	flake8 src/ --max-line-length=120 --ignore=E203,W503
+	mypy src/ --ignore-missing-imports
+	bandit -r src/ -lll
+
+format:
+	black src/
+	isort src/
+
+clean:
+	find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+	find . -type f -name "*.pyc" -delete 2>/dev/null || true
+	find . -type f -name "*.pyo" -delete 2>/dev/null || true
+	find . -type f -name ".coverage" -delete 2>/dev/null || true
+	rm -rf .pytest_cache/ .mypy_cache/ htmlcov/ 2>/dev/null || true
+
+run:
+	python src/main.py
+
+docker-build:
+	docker build -t claw_phish_v2:latest .
+
+docker-run:
+	docker run -d --name claw_phish_v2 -p 5000:5000 -p 8080:8080 --privileged \
+		-v $(PWD)/.claw_phish_v2:/app/.claw_phish_v2 \
+		-v $(PWD)/logs:/app/logs \
+		-v $(PWD)/reports:/app/reports \
+		claw_phish_v2:latest
+
+docker-stop:
+	docker stop claw_phish_v2 2>/dev/null || true
+	docker rm claw_phish_v2 2>/dev/null || true
+
+docker-clean: docker-stop
+	docker rmi claw_phish_v2:latest 2>/dev/null || true
+	docker system prune -f

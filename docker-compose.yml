@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  claw_phish:
+    build: .
+    container_name: claw_phish_v2
+    hostname: claw-phish
+    restart: unless-stopped
+    privileged: true  # Required for network features
+    network_mode: host
+    volumes:
+      - ./config:/app/config
+      - ./.claw_phish_v2:/app/.claw_phish_v2
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "5000:5000"
+      - "8080:8080"
+      - "4444-4450:4444-4450"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - CLAW_PHISH_CONFIG=/app/config/config.json
+      - CLAW_PHISH_DB=/app/.claw_phish_v2/claw_phish_v2.db
+      - TZ=UTC
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.forwarding=1
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('localhost', 5000)); s.close()"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # Optional: Redis for caching
+  redis:
+    image: redis:7-alpine
+    container_name: claw_phish_redis
+    restart: unless-stopped
+    volumes:
+      - ./redis_data:/data
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-claw_phish_2024}
+
+  # Optional: PostgreSQL for production
+  postgres:
+    image: postgres:16-alpine
+    container_name: claw_phish_postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=claw_phish
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-claw_phish_2024}
+      - POSTGRES_DB=claw_phish
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U claw_phish"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Optional: Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: claw_phish_nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - claw_phish

@@ -63,6 +63,10 @@ cd claw_phish_v2
 ```bash
 python claw_phish_v2.py
 ```
+# Documentation
+
+# References
+
 # Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Iankulani/claw_phish_v2&type=Date)](https://star-history.com/#Iankulani/claw_phish_v2&Date)

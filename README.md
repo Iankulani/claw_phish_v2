@@ -1,5 +1,16 @@
 # claw_phish_v2
 
+[![GitHub stars](https://img.shields.io/github/stars/Iankulani/claw_phish_v2?style=for-the-badge&logo=github)](https://github.com/Iankulani/claw_phish_v2/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Iankulani/claw_phish_v2?style=for-the-badge&logo=github)](https://github.com/Iankulani/claw_phish_v2/network)
+[![GitHub watchers](https://img.shields.io/github/watchers/Iankulani/claw_phish_v2?style=for-the-badge&logo=github)](https://github.com/Iankulani/claw_phish_v2/watchers)
+[![GitHub contributors](https://img.shields.io/github/contributors/Iankulani/claw_phish_v2?style=for-the-badge&logo=github)](https://github.com/Iankulani/claw_phish_v2/graphs/contributors)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Iankulani/claw_phish_v2?style=for-the-badge&logo=git)](https://github.com/Iankulani/claw_phish_v2/commits/main)
+[![License](https://img.shields.io/github/license/Iankulani/claw_phish_v2?style=for-the-badge)](https://github.com/Iankulani/claw_phish_v2/blob/main/LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-blue?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Iankulani/claw_phish_v2)
+[![Python](https://img.shields.io/badge/python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Docker](https://img.shields.io/badge/docker-supported-blue?style=for-the-badge&logo=docker&logoColor=white)](https://github.com/Iankulani/claw_phish_v2)
+[![Cybersecurity](https://img.shields.io/badge/cybersecurity-security%20research-red?style=for-the-badge&logo=hackthebox&logoColor=white)](https://github.com/Iankulani/claw_phish_v2)
+
 Claw Phish V2 is a professional cybersecurity software designed for authorized penetration testing, security assessments, phishing awareness simulations, cyber drills, red team exercises, defensive security research, and cybersecurity education. It provides organizations, educational institutions, government agencies, security consultants, and researchers with a unified environment for evaluating, improving, and validating their cybersecurity posture through controlled and authorized testing.
 
 The software supports comprehensive network penetration testing to identify vulnerabilities across internal and external infrastructures. Security professionals can assess hosts, services, network configurations, authentication mechanisms, and security controls while documenting findings through detailed reporting and risk analysis
